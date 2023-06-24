@@ -22,7 +22,7 @@ npm  start
 
 ```
 
-The server will start and be available at http://localhost:3000. You can access the API and interact with the endpoints defined in the cronRoutes.js file.
+The server will start and be available at http://localhost:8080. You can access the API and interact with the endpoints defined in the cronRoutes.js file.
 
 ## File Structure
 
