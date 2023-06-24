@@ -98,3 +98,7 @@ A cron is represented by an object with the following structure:
 - `schedule` (string): cron expression that defines the frequency of cron execution.
 - `command` (string): the command to be executed by the cron.
 - `active` (boolean): indicates whether the cron is active or not.
+
+### License
+
+This project is licensed under the [MIT License](https://github.com/lsilva92/cron-manager-express/blob/main/LICENSE).
