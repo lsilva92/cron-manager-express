@@ -87,7 +87,7 @@ const startCronbyName = async (req, res) => {
 
     res.status(200).json({
       status: 'success',
-      result: `New cron task (${cronSchedule}) started`,
+      result: `New cron task ${cronSchedule} started`,
     });
   } catch (error) {
     console.log(error);
