@@ -40,7 +40,11 @@ The server will start and be available at http://localhost:8080. You can access 
 
 │ └── script.js
 
+├── templates/
+
 ├── utils/
+
+| └── email.js
 
 │ └── readJsonFile.js
 
@@ -63,6 +67,8 @@ The server will start and be available at http://localhost:8080. You can access 
 - The **routes** folder contains the **cronRoutes.js** file, where the API endpoints related to the crons are defined.
 
 - The **jobs** folder contains the js script files, where the cron scripts are located.
+
+- The **templates** folder contains the html files of the email templates.
 
 - The **utils** folder contains the utility functions used in the project.
 
