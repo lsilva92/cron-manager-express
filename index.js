@@ -1,4 +1,5 @@
 const express = require('express');
+const globalErrorHandler = require('./controllers/errorController');
 require('dotenv').config();
 
 const cronRoutes = require('./routes/cronRoutes');
@@ -9,6 +10,12 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 app.use('/api/v1/crons', cronRoutes);
+
+app.all('*', (req, res, next) => {
+  res.send(`Can't find ${req.originalUrl} on this server!`, 404);
+});
+
+app.use(globalErrorHandler);
 
 const PORT = process.env.PORT || 8080;
 

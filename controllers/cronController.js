@@ -2,7 +2,7 @@ const fs = require('fs');
 const { startJob, stopJob, stopAllJobs } = require('../utils/scheduler');
 const readJsonFile = require('../utils/readJsonFile');
 
-const getAllCrons = async (req, res) => {
+const getAllCrons = async (req, res, next) => {
   try {
     const crons = await readJsonFile();
 
@@ -12,15 +12,11 @@ const getAllCrons = async (req, res) => {
       crons,
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      status: 'fail',
-      result: error.message,
-    });
+    next(error);
   }
 };
 
-const createCron = async (req, res) => {
+const createCron = async (req, res, next) => {
   try {
     const { name, schedule, command, active } = req.body;
 
@@ -59,15 +55,11 @@ const createCron = async (req, res) => {
       newCron,
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      status: 'fail',
-      result: error.message,
-    });
+    next(error);
   }
 };
 
-const startCronbyName = async (req, res) => {
+const startCronbyName = async (req, res, next) => {
   try {
     const cronSchedule = req.body.cron;
 
@@ -90,15 +82,11 @@ const startCronbyName = async (req, res) => {
       result: `New cron task ${cronSchedule} started`,
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      status: 'fail',
-      result: error.message,
-    });
+    next(error);
   }
 };
 
-const stopCronbyName = (req, res) => {
+const stopCronbyName = (req, res, next) => {
   try {
     const cronSchedule = req.body.cron;
 
@@ -117,15 +105,11 @@ const stopCronbyName = (req, res) => {
       result: `Cron task (${cronSchedule}) stopped`,
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      status: 'fail',
-      result: error.message,
-    });
+    next(error);
   }
 };
 
-const startAllCrons = async (req, res) => {
+const startAllCrons = async (req, res, next) => {
   try {
     const crons = await readJsonFile();
 
@@ -136,15 +120,11 @@ const startAllCrons = async (req, res) => {
       result: 'All Crons started',
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      status: 'fail',
-      result: error,
-    });
+    next(error);
   }
 };
 
-const stopAllCrons = async (req, res) => {
+const stopAllCrons = async (req, res, next) => {
   try {
     const result = stopAllJobs();
 
@@ -155,11 +135,7 @@ const stopAllCrons = async (req, res) => {
       result: 'All Crons stopped!',
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      status: 'fail',
-      result: error.message,
-    });
+    next(error);
   }
 };
 
