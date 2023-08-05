@@ -113,7 +113,9 @@ const startAllCrons = async (req, res, next) => {
   try {
     const crons = await readJsonFile();
 
-    crons.forEach((cron) => startJob(cron));
+    crons.forEach((cron) => {
+      if (cron.active) startJob(cron);
+    });
 
     res.status(200).json({
       status: 'success',
