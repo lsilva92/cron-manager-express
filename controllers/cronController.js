@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { startJob, stopJob, stopAllJobs } = require('../utils/scheduler');
 const readJsonFile = require('../utils/readJsonFile');
+const cronsWriteFile = require('../utils/fsManager');
 
 const getAllCrons = async (req, res, next) => {
   try {
@@ -41,14 +42,7 @@ const createCron = async (req, res, next) => {
       ...newCron,
     });
 
-    fs.writeFile(
-      `${__dirname}/.././cron-data/crons.json`,
-      JSON.stringify(crons, null, 4),
-      function (err) {
-        if (err) throw err;
-        console.log('The new cron was added to crons.json');
-      }
-    );
+    cronsWriteFile(crons, 'The new cron was added to crons.json');
 
     res.status(201).json({
       status: 'success',
@@ -141,6 +135,35 @@ const stopAllCrons = async (req, res, next) => {
   }
 };
 
+const changeCronStatus = async (req, res, next) => {
+  try {
+    const { cronId, status } = req.body;
+
+    if (!cronId) throw new Error('Please specify the cronId');
+    if (typeof status !== 'boolean')
+      throw new Error(`Please specify a status 'true' or 'false'`);
+
+    const crons = await readJsonFile();
+
+    const cronIndex = crons.findIndex((cron) => cron.id === cronId);
+
+    if (crons[cronIndex].active !== status) {
+      crons[cronIndex].active = status;
+    } else {
+      throw new Error(`Cron already ${status ? 'active' : 'disable'}`);
+    }
+
+    cronsWriteFile(crons, `Cron ${crons[cronIndex].name} updated`);
+
+    res.status(200).json({
+      status: 'success',
+      cron: crons[cronIndex],
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllCrons,
   createCron,
@@ -148,4 +171,5 @@ module.exports = {
   stopCronbyName,
   startAllCrons,
   stopAllCrons,
+  changeCronStatus,
 };

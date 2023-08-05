@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use('/api/v1/crons', cronRoutes);
 
 app.all('*', (req, res, next) => {
-  res.send(`Can't find ${req.originalUrl} on this server!`, 404);
+  res.status(404).send(`Can't find ${req.originalUrl} on this server!`);
 });
 
 app.use(globalErrorHandler);
