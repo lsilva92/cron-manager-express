@@ -5,7 +5,7 @@ module.exports = (crons, message) => {
     JSON.stringify(crons, null, 4),
     function (err) {
       if (err) throw err;
-      console.log(message);
+      console.log(message ? message : 'crons.json file updated');
     }
   );
 };

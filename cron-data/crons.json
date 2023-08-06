@@ -1,23 +1,23 @@
 [
-  {
-    "id": 1,
-    "name": "FirstJob",
-    "schedule": "* * * * * *",
-    "command": "node firstJob.js",
-    "active": true
-  },
-  {
-    "id": 2,
-    "name": "SecondJob",
-    "schedule": "*/2 * * * * *",
-    "command": "node secondJob.js",
-    "active": true
-  },
-  {
-    "id": 3,
-    "name": "SendEmail",
-    "schedule": "*/60 * * * * *",
-    "command": "node sendEmail.js",
-    "active": true
-  }
+    {
+        "id": 1,
+        "name": "FirstJob",
+        "schedule": "* * * * * *",
+        "command": "node firstJob.js",
+        "active": true
+    },
+    {
+        "id": 2,
+        "name": "SecondJob",
+        "schedule": "*/2 * * * * *",
+        "command": "node secondJob.js",
+        "active": true
+    },
+    {
+        "id": 3,
+        "name": "SendEmail",
+        "schedule": "*/60 * * * * *",
+        "command": "node sendEmail.js",
+        "active": true
+    }
 ]

@@ -53,6 +53,27 @@ const createCron = async (req, res, next) => {
   }
 };
 
+const deleteCron = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const crons = await readJsonFile();
+
+    if (crons.findIndex((cron) => cron.id === parseInt(id)) === -1)
+      throw new Error(`Can't find cron with the id ${id}`);
+
+    const filteredCrons = crons.filter((cron) => cron.id !== parseInt(id));
+
+    cronsWriteFile(filteredCrons);
+
+    res.status(200).json({
+      status: 'success',
+      result: `Cron with the id ${id} deleted`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const startCronbyName = async (req, res, next) => {
   try {
     const cronSchedule = req.body.cron;
@@ -167,6 +188,7 @@ const changeCronStatus = async (req, res, next) => {
 module.exports = {
   getAllCrons,
   createCron,
+  deleteCron,
   startCronbyName,
   stopCronbyName,
   startAllCrons,
