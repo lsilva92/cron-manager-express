@@ -8,9 +8,28 @@ const getAllCrons = async (req, res, next) => {
     const crons = await readJsonFile();
 
     res.status(200).json({
-      status: 'success',
+      success: true,
       length: crons.length,
       crons,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getCronById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const crons = await readJsonFile();
+
+    const cron = crons.filter((cron) => cron.id === parseInt(id));
+
+    if (!cron.length) throw new Error(`Can't find cron with the id ${id}`);
+
+    res.status(200).json({
+      success: true,
+      cron,
     });
   } catch (error) {
     next(error);
@@ -45,7 +64,7 @@ const createCron = async (req, res, next) => {
     cronsWriteFile(crons, 'The new cron was added to crons.json');
 
     res.status(201).json({
-      status: 'success',
+      success: true,
       newCron,
     });
   } catch (error) {
@@ -66,7 +85,7 @@ const deleteCron = async (req, res, next) => {
     cronsWriteFile(filteredCrons);
 
     res.status(200).json({
-      status: 'success',
+      success: true,
       result: `Cron with the id ${id} deleted`,
     });
   } catch (error) {
@@ -93,7 +112,7 @@ const startCronbyName = async (req, res, next) => {
     startJob(cron[0]);
 
     res.status(200).json({
-      status: 'success',
+      success: true,
       result: `New cron task ${cronSchedule} started`,
     });
   } catch (error) {
@@ -116,7 +135,7 @@ const stopCronbyName = (req, res, next) => {
     }
 
     res.status(200).json({
-      status: 'success',
+      success: true,
       result: `Cron task (${cronSchedule}) stopped`,
     });
   } catch (error) {
@@ -133,7 +152,7 @@ const startAllCrons = async (req, res, next) => {
     });
 
     res.status(200).json({
-      status: 'success',
+      success: true,
       result: 'All Crons started',
     });
   } catch (error) {
@@ -148,7 +167,7 @@ const stopAllCrons = async (req, res, next) => {
     if (result) throw new Error(result);
 
     res.status(200).json({
-      status: 'success',
+      success: true,
       result: 'All Crons stopped!',
     });
   } catch (error) {
@@ -177,7 +196,7 @@ const changeCronStatus = async (req, res, next) => {
     cronsWriteFile(crons, `Cron ${crons[cronIndex].name} updated`);
 
     res.status(200).json({
-      status: 'success',
+      success: true,
       cron: crons[cronIndex],
     });
   } catch (error) {
@@ -187,6 +206,7 @@ const changeCronStatus = async (req, res, next) => {
 
 module.exports = {
   getAllCrons,
+  getCronById,
   createCron,
   deleteCron,
   startCronbyName,
