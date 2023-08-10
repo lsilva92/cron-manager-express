@@ -1,4 +1,3 @@
-const fs = require('fs');
 const { startJob, stopJob, stopAllJobs } = require('../utils/scheduler');
 const readJsonFile = require('../utils/readJsonFile');
 const cronsWriteFile = require('../utils/fsManager');
@@ -87,6 +86,41 @@ const deleteCron = async (req, res, next) => {
     res.status(200).json({
       success: true,
       result: `Cron with the id ${id} deleted`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const manageCronById = async (req, res, next) => {
+  try {
+    const { command, id } = req.body;
+
+    const crons = await readJsonFile();
+
+    const cron = crons.filter((cron) => cron.id === id);
+
+    if (!cron.length) throw new Error(`Can't find cron with the id: ${id}`);
+
+    switch (command) {
+      case 'start':
+        startJob(cron[0]);
+        break;
+      case 'stop':
+        let result = stopJob(cron[0].name);
+        if (result) {
+          throw new Error(result);
+        }
+        break;
+      default:
+        throw new 'please specify one of the following commands: start, stop'();
+    }
+
+    res.status(200).json({
+      success: true,
+      result: `job ${cron[0].name} ${
+        command === 'start' ? 'started' : 'stopped'
+      }`,
     });
   } catch (error) {
     next(error);
@@ -214,4 +248,5 @@ module.exports = {
   startAllCrons,
   stopAllCrons,
   changeCronStatus,
+  manageCronById,
 };

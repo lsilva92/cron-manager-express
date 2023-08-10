@@ -18,5 +18,6 @@ router.route('/stop').post(cronController.stopCronbyName);
 router.route('/startall').post(cronController.startAllCrons);
 router.route('/stopall').post(cronController.stopAllCrons);
 router.route('/changeCronStatus').post(cronController.changeCronStatus);
+router.route('/manageCron').post(cronController.manageCronById);
 
 module.exports = router;
