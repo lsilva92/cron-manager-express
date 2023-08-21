@@ -94,6 +94,8 @@ const deleteCron = async (req, res, next) => {
 
 const manageCronById = async (req, res, next) => {
   try {
+    let result = '';
+
     const { command, id } = req.body;
 
     const crons = await readJsonFile();
@@ -104,12 +106,15 @@ const manageCronById = async (req, res, next) => {
 
     switch (command) {
       case 'start':
-        startJob(cron[0]);
+        result = startJob(cron[0]);
+        if (result.error) {
+          throw new Error(result.error);
+        }
         break;
       case 'stop':
-        let result = stopJob(cron[0].name);
-        if (result) {
-          throw new Error(result);
+        result = stopJob(cron[0].name);
+        if (result.error) {
+          throw new Error(result.error);
         }
         break;
       default:
@@ -118,9 +123,7 @@ const manageCronById = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      result: `job ${cron[0].name} ${
-        command === 'start' ? 'started' : 'stopped'
-      }`,
+      result,
     });
   } catch (error) {
     next(error);
@@ -164,13 +167,13 @@ const stopCronbyName = (req, res, next) => {
 
     let result = stopJob(cronSchedule);
 
-    if (result) {
+    if (result.Error) {
       throw new Error(result);
     }
 
     res.status(200).json({
       success: true,
-      result: `Cron task (${cronSchedule}) stopped`,
+      result,
     });
   } catch (error) {
     next(error);
